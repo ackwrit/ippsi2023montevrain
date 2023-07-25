@@ -14,6 +14,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   PermissionPhoto().init();
+  //FirestoreHelper().initMusic();
   runApp(const MyApp());
 }
 

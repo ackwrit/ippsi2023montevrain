@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ipssi2023montevrain/controller/firestore_helper.dart';
@@ -15,6 +18,8 @@ class _MyDrawerState extends State<MyDrawer> {
   //variable
   bool isEditing = false;
   TextEditingController nickName = TextEditingController();
+  String? nameImage;
+  Uint8List? bytesImage;
 
   //méthode
   showCalendar() async {
@@ -38,8 +43,55 @@ class _MyDrawerState extends State<MyDrawer> {
 
   pickerImage() async{
       FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.image
+        type: FileType.image,
+          withData: true
       );
+      if(result != null){
+        setState(() {
+          bytesImage = result.files.first.bytes;
+          nameImage = result.files.first.name;
+        });
+        popImage();
+
+      }
+
+  }
+
+  popImage(){
+    showDialog(
+      barrierDismissible: false,
+        context: context,
+        builder: (context){
+          return CupertinoAlertDialog(
+            title: const Text("Souhaitez-vous cette image"),
+            content: Image.memory(bytesImage!),
+            actions: [
+              TextButton(onPressed: (){
+                Navigator.pop(context);
+
+              }, child: const Text("Annulation")
+              ),
+              TextButton(
+                  onPressed: (){
+                    FirestoreHelper().stockageFiles("PHOTOS", moi.uid, nameImage!, bytesImage!).then((value){
+                      setState(() {
+                        moi.avatar = value;
+                      });
+                      Map<String,dynamic> datas = {
+                        "AVATAR":moi.avatar
+                      };
+                      FirestoreHelper().updateUser(moi.uid,datas);
+                    });
+
+
+                    Navigator.pop(context);
+
+                  }, child: const Text("Enregistrement")
+              ),
+            ],
+          );
+        }
+    );
   }
   @override
   Widget build(BuildContext context) {
