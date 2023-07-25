@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               TextField(
+                controller: lastName,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.person,color: Colors.black,),
                     hintText: 'Entrer votre nom',
@@ -75,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               TextField(
+                controller: firstName,
                 decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.person,color: Colors.black,),
                     hintText: 'Entrer votre prénom',
@@ -88,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
 
               TextField(
+                controller: mail,
                 decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.mail,color: Colors.black,),
                     hintText: 'Entrer votre email',
@@ -101,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
 
               TextField(
+                controller: password,
                 decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock,color: Colors.black,),
                     hintText: 'Entrer votre password',
@@ -112,6 +116,26 @@ class _MyHomePageState extends State<MyHomePage> {
                     )
                 ),
               ),
+              ElevatedButton(
+                  onPressed: (){
+                ScaffoldMessenger.of(context).clearSnackBars();
+                FirestoreHelper().inscription(mail.text, firstName.text, "", lastName.text, password.text).then((value){
+                        setState(() {
+                          moi = value;
+                        });
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context){
+                              return const MySecondePage();
+                            }
+                        ));
+
+                      }).catchError((){
+
+                      });
+
+              },
+                  child: const Text("Enregistrement")
+              )
             ],
           ),
         )
@@ -205,19 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-                      /*FirestoreHelper().inscription(mail.text, "djino", "skweel", "dissingar", password.text).then((value){
-                        setState(() {
-                          moi = value;
-                        });
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context){
-                              return const MySecondePage();
-                            }
-                        ));
 
-                      }).catchError((){
-
-                      });*/
 
                     },
                     child: const Text("Inscription")
