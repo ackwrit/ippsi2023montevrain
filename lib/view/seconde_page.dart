@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ipssi2023montevrain/controller/background_controller.dart';
+import 'package:ipssi2023montevrain/view/my_drawer.dart';
 
 class MySecondePage extends StatefulWidget {
   const MySecondePage({super.key});
@@ -14,8 +16,29 @@ class _MySecondePageState extends State<MySecondePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: bodyPage(),
+      drawer: Container(
+        height: MediaQuery.of(context).size.height ,
+        width: MediaQuery.of(context).size.width * 0.7,
+
+        decoration: const BoxDecoration(
+            color: Colors.amberAccent,
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(85),topRight: Radius.circular(85))
+        ),
+        child: const MyDrawer(),
+      ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          const MyBackground(),
+          SafeArea(
+              child: bodyPage()
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
         onTap: (value){

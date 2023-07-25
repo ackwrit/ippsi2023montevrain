@@ -13,6 +13,32 @@ class MyUser {
   late String uid;
   List? favoris;
 
+  //variable caluclé
+
+  int get age{
+    DateTime now = DateTime.now();
+    int age = now.year - birthday!.year;
+    int month1 = now.month;
+    int month2 = birthday!.month;
+    if(month2>month1){
+      age --;
+    }
+    else if (month1 == month2) {
+      int day1 = now.day;
+      int day2 = birthday!.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return age;
+
+
+  }
+
+  String get fullName {
+    return firstName + " " + lastName ;
+  }
+
 
   //constructeur
   MyUser(){
