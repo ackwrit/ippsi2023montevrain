@@ -27,6 +27,11 @@ class FirestoreHelper {
 
   }
 
+  updateUser(String uid , Map<String,dynamic> data){
+    cloudUsers.doc(uid).update(data);
+
+  }
+
   Future<MyUser>getUser(String uid) async {
     DocumentSnapshot documentSnapshot = await cloudUsers.doc(uid).get();
     return MyUser.dataBase(documentSnapshot);

@@ -40,6 +40,8 @@ dependencies:
   firebase_storage:
   cloud_firestore:
   font_awesome_flutter:
+  file_picker:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:

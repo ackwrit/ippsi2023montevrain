@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:ipssi2023montevrain/controller/animation_controller.dart';
 import 'package:ipssi2023montevrain/controller/background_controller.dart';
 import 'package:ipssi2023montevrain/controller/firestore_helper.dart';
+import 'package:ipssi2023montevrain/controller/permission_photo.dart';
 import 'package:ipssi2023montevrain/globale.dart';
 import 'package:ipssi2023montevrain/view/seconde_page.dart';
 import 'firebase_options.dart';
@@ -12,6 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  PermissionPhoto().init();
   runApp(const MyApp());
 }
 
