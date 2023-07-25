@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ipssi2023montevrain/controller/animation_controller.dart';
+import 'package:ipssi2023montevrain/controller/background_controller.dart';
 import 'package:ipssi2023montevrain/controller/firestore_helper.dart';
 import 'package:ipssi2023montevrain/globale.dart';
 import 'package:ipssi2023montevrain/view/seconde_page.dart';
@@ -21,11 +23,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+
       theme: ThemeData(
 
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -52,6 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
   //méthodes
   SnackBar snackBarShow(){
     return SnackBar(
+      padding: const EdgeInsets.all(10),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15))),
       backgroundColor: Colors.amber,
         duration: const Duration(minutes: 5),
         
@@ -75,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
                 ),
               ),
+              const SizedBox(height: 15,),
               TextField(
                 controller: firstName,
                 decoration: InputDecoration(
@@ -88,6 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     )
                 ),
               ),
+              const SizedBox(height: 15,),
 
               TextField(
                 controller: mail,
@@ -102,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     )
                 ),
               ),
+              const SizedBox(height: 15,),
 
               TextField(
                 controller: password,
@@ -116,6 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     )
                 ),
               ),
+              const SizedBox(height: 15,),
               ElevatedButton(
                   onPressed: (){
                 ScaffoldMessenger.of(context).clearSnackBars();
@@ -148,96 +158,113 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
 
-        title: Text(widget.title),
-      ),
-      body:Padding(
-          padding: const EdgeInsets.all(15),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  height: 300,
-                  width: 450,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: const DecorationImage(
-                        image: NetworkImage("https://tse2.mm.bing.net/th?id=OIP.Ja_A16t6HOsvb4DPYB4ZCQHaDY&pid=Api"),
-                      fit: BoxFit.fill,
-                    )
-                  ),
+      body:Stack(
+        children: [
+          const MyBackground(),
+          Padding(
+              padding: const EdgeInsets.all(15),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    MyAnimationController(
+                      delay: 1,
+                      child: Container(
+                        height: 300,
+                        width: 450,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          image: const DecorationImage(
+                              image: NetworkImage("https://tse2.mm.bing.net/th?id=OIP.Ja_A16t6HOsvb4DPYB4ZCQHaDY&pid=Api"),
+                            fit: BoxFit.fill,
+                          )
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10,),
+
+                    MyAnimationController(
+                      delay: 2,
+                      child: TextField(
+
+                        controller: mail,
+                        decoration: InputDecoration(
+                          hintText: "Entrer votre mail",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          )
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 10,),
+                    MyAnimationController(
+                      delay: 3,
+                      child: TextField(
+                        controller: password,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            hintText: "Entrer votre password",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            )
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 10,),
+
+
+                    MyAnimationController(
+                      delay: 4,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          shape: const StadiumBorder()
+                        ),
+                          onPressed: (){
+                          FirestoreHelper().connect(mail.text, password.text).then((value) {
+                            setState(() {
+                              moi = value;
+                            });
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context){
+                                  return const MySecondePage();
+                                }
+                            ));
+
+                          }).catchError((error){
+
+                          });
+
+                          },
+                          child: const Text("Connexion")
+                      ),
+                    ),
+                    const SizedBox(height: 10,),
+
+                    MyAnimationController(
+                      delay: 5,
+                      child: TextButton(
+                          onPressed: (){
+
+                            ScaffoldMessenger.of(context).showSnackBar(snackBarShow());
+
+
+
+
+
+                          },
+                          child: const Text("Inscription")
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10,),
-
-                TextField(
-
-                  controller: mail,
-                  decoration: InputDecoration(
-                    hintText: "Entrer votre mail",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    )
-                  ),
-                ),
-
-                const SizedBox(height: 10,),
-                TextField(
-                  controller: password,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      hintText: "Entrer votre password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      )
-                  ),
-                ),
-
-                const SizedBox(height: 10,),
-
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                    shape: const StadiumBorder()
-                  ),
-                    onPressed: (){
-                    FirestoreHelper().connect(mail.text, password.text).then((value) {
-                      setState(() {
-                        moi = value;
-                      });
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context){
-                            return const MySecondePage();
-                          }
-                      ));
-
-                    }).catchError((error){
-
-                    });
-
-                    },
-                    child: const Text("Connexion")
-                ),
-                const SizedBox(height: 10,),
-
-                TextButton(
-                    onPressed: (){
-
-                      ScaffoldMessenger.of(context).showSnackBar(snackBarShow());
-
-
-
-
-
-                    },
-                    child: const Text("Inscription")
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       )
 
     );
