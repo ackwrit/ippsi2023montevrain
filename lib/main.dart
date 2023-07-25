@@ -41,11 +41,82 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //variables
   TextEditingController mail = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController nickName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController firstName = TextEditingController();
+
+
+  //méthodes
+  SnackBar snackBarShow(){
+    return SnackBar(
+      backgroundColor: Colors.amber,
+        duration: const Duration(minutes: 5),
+        
+        content: Container(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+          height: MediaQuery.of(context).size.height *0.75,
+          width: MediaQuery.of(context).size.width,
+
+          child: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.person,color: Colors.black,),
+                    hintText: 'Entrer votre nom',
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+
+                  )
+                ),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.person,color: Colors.black,),
+                    hintText: 'Entrer votre prénom',
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+
+                    )
+                ),
+              ),
+
+              TextField(
+                decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.mail,color: Colors.black,),
+                    hintText: 'Entrer votre email',
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+
+                    )
+                ),
+              ),
+
+              TextField(
+                decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock,color: Colors.black,),
+                    hintText: 'Entrer votre password',
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+
+                    )
+                ),
+              ),
+            ],
+          ),
+        )
+    );
+  }
 
 
 
@@ -129,7 +200,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 TextButton(
                     onPressed: (){
-                      FirestoreHelper().inscription(mail.text, "djino", "skweel", "dissingar", password.text).then((value){
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBarShow());
+
+
+
+                      /*FirestoreHelper().inscription(mail.text, "djino", "skweel", "dissingar", password.text).then((value){
                         setState(() {
                           moi = value;
                         });
@@ -141,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       }).catchError((){
 
-                      });
+                      });*/
 
                     },
                     child: const Text("Inscription")
