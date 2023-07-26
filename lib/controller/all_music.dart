@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ipssi2023montevrain/controller/firestore_helper.dart';
 import 'package:ipssi2023montevrain/globale.dart';
 import 'package:ipssi2023montevrain/model/music.dart';
+import 'package:ipssi2023montevrain/view/player_music.dart';
 
 class AllMusic extends StatefulWidget {
   const AllMusic({super.key});
@@ -35,6 +36,9 @@ class _AllMusicState extends State<AllMusic> {
                   color: Colors.amber,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   child: ListTile(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> MyPlayerMusic(music: music,)));
+                    },
                     leading: Image.network(music.image ?? defaultImage,width: 100,),
                     title: Text(music.title),
                     subtitle: Text(music.artist),
