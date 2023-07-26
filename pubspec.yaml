@@ -42,6 +42,7 @@ dependencies:
   font_awesome_flutter:
   file_picker:
   permission_handler:
+  audioplayers:
 
 dev_dependencies:
   flutter_test:

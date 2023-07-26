@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ipssi2023montevrain/controller/background_controller.dart';
@@ -14,8 +15,110 @@ class MyPlayerMusic extends StatefulWidget {
 
 class _MyPlayerMusicState extends State<MyPlayerMusic> {
   //variable
-  double position = 0;
+  Duration position = Duration(seconds: 0);
   bool isFavorite = false;
+  late StatutPlayer statutPlayer;
+  late AudioPlayer audioPlayer;
+  late double volumeSound;
+  late Duration dureeTotalMusic;
+
+
+
+  //méthode
+
+  play(){
+    setState(() {
+      statutPlayer = StatutPlayer.play;
+    });
+    audioPlayer.play(UrlSource(widget.music.file),volume: volumeSound);
+
+  }
+
+  pause(){
+    setState(() {
+      statutPlayer = StatutPlayer.pause;
+    });
+    audioPlayer.pause();
+  }
+
+  stop(){
+    setState(() {
+      statutPlayer = StatutPlayer.stop;
+    });
+    audioPlayer.stop();
+  }
+
+  forward(){
+    if(position.inSeconds + 10 <= dureeTotalMusic.inSeconds){
+      setState(() {
+        Duration time = Duration(seconds: position.inSeconds + 10);
+        audioPlayer.seek(time);
+      });
+
+    }
+
+
+  }
+
+  backward(){
+   if(position.inSeconds <= 10){
+     setState(() {
+       Duration time = Duration(seconds: 0);
+       position = time;
+     });
+
+   }
+   else
+     {
+       setState(() {
+         Duration time = Duration(seconds: position.inSeconds - 10);
+         position = time;
+       });
+
+     }
+
+  }
+  configurationPlayer(){
+    statutPlayer = StatutPlayer.stop;
+    volumeSound = 0.5;
+    dureeTotalMusic = const Duration(seconds: 8000);
+    audioPlayer = AudioPlayer();
+    audioPlayer.onDurationChanged.listen((event) {
+      setState(() {
+        dureeTotalMusic = event;
+      });
+    });
+    audioPlayer.onPositionChanged.listen((event) {
+      setState(() {
+        position = event;
+      });
+    });
+
+
+
+
+
+
+  }
+
+  cleanPlayer(){
+    audioPlayer.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    configurationPlayer();
+    super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    cleanPlayer();
+    // TODO: implement dispose
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +131,7 @@ class _MyPlayerMusicState extends State<MyPlayerMusic> {
           IconButton(
               onPressed: (){
                 setState(() {
-                  isFavorite = !isFavorite;
+
                 });
               },
               icon: Icon(Icons.favorite,color: (isFavorite)? Colors.red :Colors.white,)
@@ -77,12 +180,16 @@ class _MyPlayerMusicState extends State<MyPlayerMusic> {
             children: [
               IconButton(
                   onPressed: (){
+                    volumeSound -= 0.1;
 
                   },
                   icon: const FaIcon(FontAwesomeIcons.volumeLow)
               ),
               IconButton(
                   onPressed: (){
+                    setState(() {
+                      volumeSound += 0.1;
+                    });
 
                   },
                   icon: const FaIcon(FontAwesomeIcons.volumeHigh)
@@ -114,30 +221,54 @@ class _MyPlayerMusicState extends State<MyPlayerMusic> {
             child: Slider.adaptive(
                 secondaryActiveColor: Colors.black,
                 activeColor: Colors.amber,
-                max: 400,
+                max: dureeTotalMusic.inSeconds.toDouble(),
                 min: 0,
-                value: position,
+                value: position.inSeconds.toDouble(),
                 onChanged: (value){
                   setState(() {
-                    position = value;
+                    Duration time = Duration(seconds: value.toInt());
+                    position = time;
                   });
 
                 }
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(dureeTotalMusic.inSeconds.toString())
+            ],
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(onPressed: (){
+                backward();
 
               }, icon: const FaIcon(FontAwesomeIcons.backward)
               ),
-              IconButton(onPressed: (){
+              IconButton(
+                  onPressed: (){
+                    if(statutPlayer == StatutPlayer.stop || statutPlayer == StatutPlayer.pause){
+                      setState(() {
+                        statutPlayer = StatutPlayer.play;
+                        play();
+                      });
+                    }
+                    else
+                      {
+                        setState(() {
+                          statutPlayer = StatutPlayer.pause;
+                          pause();
+                        });
+                      }
 
-              }, icon:const  FaIcon(FontAwesomeIcons.play,size: 40,)
+
+              }, icon:FaIcon((statutPlayer == StatutPlayer.pause)?FontAwesomeIcons.play: FontAwesomeIcons.pause,size: 40,)
               ),
               IconButton(
                   onPressed: (){
+                    forward();
 
                   },
                   icon: const FaIcon(FontAwesomeIcons.forward)
