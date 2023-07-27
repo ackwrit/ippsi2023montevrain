@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ipssi2023montevrain/controller/firestore_helper.dart';
 import 'package:ipssi2023montevrain/globale.dart';
+import 'package:ipssi2023montevrain/view/my_messagerie.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -159,6 +160,19 @@ class _MyDrawerState extends State<MyDrawer> {
               ListTile(
                 leading: Icon(Icons.mail),
                 title: Text(moi.mail),
+              ),
+
+              ListTile(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context){
+                        return const MyMessagerie();
+                      }
+                  ));
+
+                },
+                leading: Icon(Icons.chat_bubble),
+                title: Text("Contacts"),
               ),
               
               //pseudo

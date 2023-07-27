@@ -15,6 +15,7 @@ void main() async {
   );
   PermissionPhoto().init();
   //FirestoreHelper().initMusic();
+
   runApp(const MyApp());
 }
 
@@ -153,6 +154,18 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         )
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    FirestoreHelper().getUser("xrdsR43Nmdbc0oL98nY1szvGTLt2").then((value){
+      setState(() {
+        serviceClient = value;
+      });
+
+    });
+    super.initState();
   }
 
 

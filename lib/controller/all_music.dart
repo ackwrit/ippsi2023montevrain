@@ -42,6 +42,29 @@ class _AllMusicState extends State<AllMusic> {
                     leading: Image.network(music.image ?? defaultImage,width: 100,),
                     title: Text(music.title),
                     subtitle: Text(music.artist),
+                    trailing: IconButton(
+                      icon: Icon(Icons.favorite,color: (moi.favoris!.contains(music.uid)?Colors.red: Colors.grey),),
+                      onPressed: (){
+                        setState(() {
+
+                          if(moi.favoris!.contains(music.uid)){
+                            moi.favoris!.remove(music.uid);
+                            Map<String,dynamic> data = {
+                              "FAVORIS": moi.favoris
+                            };
+                            FirestoreHelper().updateUser(moi.uid, data);
+                          }
+                          else{
+                            moi.favoris!.add(music.uid);
+                            Map<String,dynamic> data = {
+                              "FAVORIS": moi.favoris
+                            };
+                            FirestoreHelper().updateUser(moi.uid, data);
+
+                          }
+                        });
+                      },
+                    ),
                   ),
                 );
                 }

@@ -62,6 +62,11 @@ class FirestoreHelper {
 
   }
 
+  Future<MyMusic> getMusic(String uid) async{
+    DocumentSnapshot snapshot = await cloudMusics.doc(uid).get();
+    return MyMusic(snapshot);
+  }
+
   Future<MyUser>getUser(String uid) async {
     DocumentSnapshot documentSnapshot = await cloudUsers.doc(uid).get();
     return MyUser.dataBase(documentSnapshot);

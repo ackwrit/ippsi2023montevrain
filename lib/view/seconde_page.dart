@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ipssi2023montevrain/controller/all_music.dart';
 import 'package:ipssi2023montevrain/controller/background_controller.dart';
 import 'package:ipssi2023montevrain/view/my_drawer.dart';
+import 'package:ipssi2023montevrain/controller/my_favorites.dart';
 
 class MySecondePage extends StatefulWidget {
   const MySecondePage({super.key});
@@ -67,7 +68,7 @@ class _MySecondePageState extends State<MySecondePage> {
   Widget bodyPage(){
     switch(index){
       case 0 : return const AllMusic();
-      case 1: return Text("Afficher mes favoris");
+      case 1: return const MyFavorites();
       default : return Text("coucou");
     }
 
